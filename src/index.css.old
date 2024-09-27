@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+@layer base {
+  :root {
+    --text: #0a0605;
+    --background: #fcfaf8;
+    --primary: #c9644a;
+    --secondary: #e89a87;
+    --accent: #ee7253;
+    --info: #a021ca;
+  }
+  .dark {
+    --text: #faf6f5;
+    --background: #070503;
+    --primary: #b54f36;
+    --secondary: #782a17;
+    --accent: #ac3011;
+    --info: #7c179e;
+  }
+}
+
+/* @layer base {
+  :root {
+    --text: #0c1d14;
+    --background: #f4fbf6;
+    --primary: #39d57f;
+    --secondary: #85efb5;
+    --accent: #43f493;
+    --info: #3c47e5;
+  }
+  .dark {
+    --text: #e2f3ea;
+    --background: #040b06;
+    --primary: #2ac670;
+    --secondary: #107a40;
+    --accent: #0bbc5b;
+    --info: #343b9c;
+  }
+} */
