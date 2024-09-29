@@ -3,7 +3,7 @@ import { ReactP5Wrapper } from "react-p5-wrapper";
 import { useResizeDetector } from "react-resize-detector";
 import GridSketch from "./Sketches/GridSketch";
 
-export default function World() {
+export default function World(props: {code: string | undefined}) {
     const [rotation, setRotation] = useState(0);
 
     const { width, height, ref } = useResizeDetector();
@@ -24,7 +24,7 @@ export default function World() {
       <div className="size-full" ref={ref} onContextMenu={(e) => {e.preventDefault()}}>
         {/* <center>World</center>
         <center><div>{`${width} | ${height}`}</div></center> */}
-        <ReactP5Wrapper sketch={GridSketch} rotation={rotation} width={width} height={height} dx={50} dy={50} />
+        <ReactP5Wrapper sketch={GridSketch} rotation={rotation} width={width} height={height} dx={50} dy={50} code={props.code} />
       </div>
     ); 
   }

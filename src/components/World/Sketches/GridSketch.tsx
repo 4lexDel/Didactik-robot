@@ -1,19 +1,19 @@
 import { P5CanvasInstance, SketchProps } from "react-p5-wrapper";
 
-class Robot{
+class Robot {
     x: number;
     y: number;
 
     scale: number = 0.9;
 
-    constructor(x: number, y: number){
+    constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
 
-    display(p5: P5CanvasInstance, dx: number, dy: number){
+    display(p5: P5CanvasInstance, dx: number, dy: number) {
         p5.fill(p5.color(200, 100, 50));
-        p5.ellipse(this.x+dx/2, this.y+dy/2, dx*this.scale, dy*this.scale);
+        p5.ellipse(this.x + dx / 2, this.y + dy / 2, dx * this.scale, dy * this.scale);
     }
 }
 
@@ -31,24 +31,28 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
     let robot: Robot = new Robot(0, 0);
 
+    let code: string;
+
     p5.setup = () => p5.createCanvas(currentWidth, currentHeight, p5.WEBGL);
 
     p5.updateWithProps = (props: SketchProps) => {
         if ((props.width && props.height) && (currentWidth != props.width || currentHeight != props.height)) {
             currentWidth = Number(props.width);
             currentHeight = Number(props.height);
-
-            // console.log("DIM");
-            // console.log(props.width);
-            // console.log(props.height);
-
             resizeCanvas(true);
         }
 
-        if ((props.dx && Number(props.dx) > 0 && props.dy && Number(props.dy) > 0)  && (dx != props.dx || dy != props.dy)) {
+        if ((props.dx && Number(props.dx) > 0 && props.dy && Number(props.dy) > 0) && (dx != props.dx || dy != props.dy)) {
             dx = Number(props.dx);
             dy = Number(props.dy);
             resizeCanvas(false);
+        }
+
+        if (props.code && props.code != code) {
+            code = String(props.code);
+
+            console.log("Compile code");
+            compileUserCode(code);
         }
     };
 
@@ -74,10 +78,10 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
         if (p5.mouseButton === "left") {
             let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
-    
-            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, (map[mapCoords.x][mapCoords.y]+1)%2);
+
+            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, (map[mapCoords.x][mapCoords.y] + 1) % 2);
         }
-        else{
+        else {
             robot.x = 0;
             robot.y = 0;
         }
@@ -85,8 +89,8 @@ export default function GridSketch(p5: P5CanvasInstance) {
     }
 
     const convertMouseCoordsToMapCoords = (x: number, y: number) => {
-        let mx = Math.trunc(x/dx);
-        let my = Math.trunc(y/dy);
+        let mx = Math.trunc(x / dx);
+        let my = Math.trunc(y / dy);
 
         if (mx < 0 || mx >= map.length || my < 0 || my >= map[0].length) return null;
 
@@ -98,8 +102,8 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
     const convertMapCoordsToMouseCoords = (x: number, y: number) => {
         return {
-            x: x*dx,
-            y: y*dy
+            x: x * dx,
+            y: y * dy
         }
     }
 
@@ -107,31 +111,46 @@ export default function GridSketch(p5: P5CanvasInstance) {
         if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
         map[x][y] = val;
 
-        compileUserCode(`
-        function(x, y, iteration, map) { // current state
-            if (x <= 4) {
-                return {
-                    x: x+1,
-                    y: y+1,
-                };    
-                // action set and realized
-            }
-            return null;
-        }
-        `);
+        // compileUserCode(`
+        // function(x, y, iteration, map) { // current state
+        //     if (x <= 4) {
+        //         return {
+        //             move: "right"
+        //         };    
+        //         // action set and realized
+        //     }
+        //     return null;
+        // }
+        // `);
+        // compileUserCode(`
+        // function(x, y, iteration, map) { // current state
+        //     if(iteration < 4) {
+        //         return {move: "right"};
+        //     }
+        //     if(iteration < 8) {
+        //         return {move: "down"};
+        //     }
+        //     if(iteration < 12) {
+        //         return {move: "left"};
+        //     }
+        //     if(iteration < 16) {
+        //         return {move: "up"};
+        //     }
+        // }
+        // `);
     }
 
-    const compileUserCode = async(code: string) => {
-        let main = (x: number, y: number, iteration: number, map: any): any => {};
+    const compileUserCode = async (code: string) => {
+        let main = (x: number, y: number, iteration: number, map: any): any => { };
 
-        eval("main = "+code);
+        eval("main = " + code);
 
         // first iteration
         let i = 0;
 
         let mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
 
-        if(!mapCoords) return;
+        if (!mapCoords) return;
 
         let result = main(mapCoords.x, mapCoords.y, i, map);
 
@@ -139,16 +158,28 @@ export default function GridSketch(p5: P5CanvasInstance) {
             console.log(result);
             i++;
 
-            let mouseCoords = convertMapCoordsToMouseCoords(result.x, result.y);
-            
-            robot.x = mouseCoords.x;
-            robot.y = mouseCoords.y;
+            switch (result.move) {
+                case "up":
+                    robot.y -= dy;
+                    break;
+                case "down":
+                    robot.y += dy;
+                    break;
+                case "left":
+                    robot.x -= dx;
+                    break;
+                case "right":
+                    robot.x += dx;
+                    break;
+            }
 
-            let newResult = await (async() => {
+            let newResult = await (async () => {
                 return new Promise((res, rej) => {
                     setTimeout(() => {
-                        res(main(result.x, result.y, i, map));
-                    }, 1000);
+                        mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
+                        if (!mapCoords) return;
+                        res(main(mapCoords.x, mapCoords.y, i, map));
+                    }, 400);
                 });
             })();
 
@@ -165,7 +196,7 @@ export default function GridSketch(p5: P5CanvasInstance) {
         // p5.noStroke();
         displayMap();
         displayRobot();
-        
+
         p5.pop();
     };
 

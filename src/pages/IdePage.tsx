@@ -1,8 +1,17 @@
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import Code from "../components/Code/Code";
 import World from "../components/World/World";
+import { useState } from "react";
 
 function IdePage() {
+    const [code, setCode] = useState<string | undefined>(undefined);
+    let buildNumber = 0;
+
+    const handleCodeRun = (code: string | undefined) => {
+        buildNumber++;
+        setCode(code+"// Build n°"+buildNumber);
+    }
+
     return (
         <div className="flex-1 ide-page h-96 flex flex-col">
             <PanelGroup direction="horizontal" className="border-2 border-text">
@@ -13,7 +22,7 @@ function IdePage() {
                 <Panel minSize={10}>
                     <PanelGroup direction="vertical">
                         <Panel defaultSize={80} minSize={10}>
-                            <World></World>
+                            <World code={code}></World>
                         </Panel>
                         <PanelResizeHandle className="border h-1 border-text" />
                         <Panel minSize={10}>
@@ -24,7 +33,7 @@ function IdePage() {
                 <PanelResizeHandle className="border w-1 border-text" />
                 <Panel minSize={10} className="overflow-auto">
                     <center>Editeur</center>
-                    <Code></Code>
+                    <Code onRun={handleCodeRun}></Code>
                 </Panel>
             </PanelGroup>
         </div>
