@@ -21,7 +21,7 @@ export default function World() {
     }, []);
 
     return(
-      <div className="size-full" ref={ref}>
+      <div className="size-full" ref={ref} onContextMenu={(e) => {e.preventDefault()}}>
         {/* <center>World</center>
         <center><div>{`${width} | ${height}`}</div></center> */}
         <ReactP5Wrapper sketch={GridSketch} rotation={rotation} width={width} height={height} dx={50} dy={50} />

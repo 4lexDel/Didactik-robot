@@ -1,8 +1,23 @@
 import { P5CanvasInstance, SketchProps } from "react-p5-wrapper";
 
-export default function GridSketch(p5: P5CanvasInstance) {
-    let rotation = 0;
+class Robot{
+    x: number;
+    y: number;
 
+    scale: number = 0.9;
+
+    constructor(x: number, y: number){
+        this.x = x;
+        this.y = y;
+    }
+
+    display(p5: P5CanvasInstance, dx: number, dy: number){
+        p5.fill(p5.color(200, 100, 50));
+        p5.ellipse(this.x+dx/2, this.y+dy/2, dx*this.scale, dy*this.scale);
+    }
+}
+
+export default function GridSketch(p5: P5CanvasInstance) {
     let currentWidth: number = 200;
     let currentHeight: number = 200;
 
@@ -13,6 +28,8 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
     let nbX: number = -1;
     let nbY: number = -1;
+
+    let robot: Robot = new Robot(0, 0);
 
     p5.setup = () => p5.createCanvas(currentWidth, currentHeight, p5.WEBGL);
 
@@ -53,16 +70,35 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
     p5.mousePressed = () => {
         console.log("Mousse pressed");
-        console.log(`X=${p5.mouseX} Y=${p5.mouseY}`);
+        console.log(`X=${p5.mouseX} Y=${p5.mouseY} Button=${p5.mouseButton}`);
 
-        let mx = Math.trunc(p5.mouseX/dx);
-        let my = Math.trunc(p5.mouseY/dy);
-
-        if (map) {
-            map[mx][my] = (map[mx][my]+1)%2;
-            console.log(map);
-            
+        if (p5.mouseButton === "left") {
+            let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
+    
+            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, (map[mapCoords.x][mapCoords.y]+1)%2);
         }
+        else{
+            robot.x += dx;
+            robot.y += dy;
+        }
+
+    }
+
+    const convertMouseCoordsToMapCoords = (x: number, y: number) => {
+        let mx = Math.trunc(x/dx);
+        let my = Math.trunc(y/dy);
+
+        if (mx < 0 || mx >= map.length || my < 0 || my >= map[0].length) return null;
+
+        return {
+            x: mx,
+            y: my
+        }
+    }
+
+    const updateMapCell = (x: number, y: number, val: number) => {
+        if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
+        map[x][y] = val;
     }
 
     p5.draw = () => {
@@ -71,7 +107,13 @@ export default function GridSketch(p5: P5CanvasInstance) {
         p5.translate(-currentWidth / 2, -currentHeight / 2);
         // p5.normalMaterial();
         // p5.noStroke();
+        displayMap();
+        displayRobot();
+        
+        p5.pop();
+    };
 
+    const displayMap = () => {
         if (map) {
             for (let x = 0; x < map.length; x++) {
                 for (let y = 0; y < map[x].length; y++) {
@@ -88,6 +130,9 @@ export default function GridSketch(p5: P5CanvasInstance) {
                 }
             }
         }
-        p5.pop();
-    };
+    }
+
+    const displayRobot = () => {
+        robot.display(p5, dx, dy);
+    }
 }
