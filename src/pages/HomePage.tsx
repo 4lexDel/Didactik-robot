@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Form from "../components/Form/Form";
-import Modal from "../components/Modal/Modal";
-import Palette from "../components/Palette/Palette";
+import Form from "../components/Shared/Form/Form";
+import Modal from "../components/Shared/Modal/Modal";
+import Palette from "../components/Shared/Palette/Palette";
 
 function HomePage() {
     const [isOpen, setIsOpen] = useState(true);
