@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { useResizeDetector } from "react-resize-detector";
-import GridSketch from "../Sketches/GridSketch";
+import GridSketch from "./Sketches/GridSketch";
 
 export default function World() {
     const [rotation, setRotation] = useState(0);

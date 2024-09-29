@@ -11,15 +11,34 @@
     <script>
         let val = 5;
 
+        function main() {};
+
         let code = `
-        function main() {
-            console.log(val);
+        function main(x, y, iteration, map) { // current state
+            if (x <= 6) {
+                return {
+                    x: x+1,
+                    y: 0,
+                };    
+                // action set and realized
+            }
+            return null;
         }
         `;
 
         eval(code);
 
-        main();
+        // first iteration
+        let i = 0;
+        let result = main(0, 0, i, null);
+
+        while (result) {
+            console.log(result);
+            i++;
+            // APPLY to the canvas (with delay)
+            result = main(result.x, result.y, i, null);
+        }
+        console.log("End");
     </script>
 </body>
 
