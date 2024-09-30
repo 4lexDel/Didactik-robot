@@ -79,7 +79,7 @@ export default function GridSketch(p5: P5CanvasInstance) {
         if (p5.mouseButton === "left") {
             let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
 
-            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, (map[mapCoords.x][mapCoords.y] + 1) % 2);
+            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, (map[mapCoords.x][mapCoords.y] + 1) % 3);
         }
         else {
             robot.x = 0;
@@ -187,7 +187,7 @@ export default function GridSketch(p5: P5CanvasInstance) {
     }
 
     p5.draw = () => {
-        p5.background(100);
+        p5.background(0, 200, 0);
         p5.push();
         p5.translate(-currentWidth / 2, -currentHeight / 2);
         // p5.normalMaterial();
@@ -204,11 +204,14 @@ export default function GridSketch(p5: P5CanvasInstance) {
                 for (let y = 0; y < map[x].length; y++) {
                     switch (map[x][y]) {
                         case 0:
-                            p5.fill(p5.color(0, 200, 0));
+                            p5.fill(p5.color(0, 200, 0)); // Green
                             break;
 
                         case 1:
-                            p5.fill(p5.color(200, 0, 0));
+                            p5.fill(p5.color(0, 0, 100)); // Dark blue
+                            break;
+                        case 2:
+                            p5.fill(p5.color(200, 0, 0, 127)); // Red
                             break;
                     }
                     p5.rect(x * dx, y * dy, dx, dy);
