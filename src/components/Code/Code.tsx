@@ -3,19 +3,22 @@ import { useContext, useState } from "react";
 import { ThemeContext } from "../../Contexts/ThemeContext";
 
 function Code(props: {onRun: (code: string | undefined) => void}) {
-  const [code, setCode] = useState<string | undefined>(`
-function main(x, y, iteration, map) { // current state
-    if(iteration < 4) {
-        return {move: "right"};
+  const [code, setCode] = useState<string | undefined>(
+`function* main(initX, initY, map) {
+    for (let i = 0; i < 4; i++) {
+        yield {move: "right"};
     }
-    if(iteration < 8) {
-        return {move: "down"};
+
+    for (let i = 0; i < 4; i++) {
+        yield {move: "down"};
     }
-    if(iteration < 12) {
-        return {move: "left"};
+
+    for (let i = 0; i < 4; i++) {
+        yield {move: "left"};
     }
-    if(iteration < 16) {
-        return {move: "up"};
+
+    for (let i = 0; i < 4; i++) {
+        yield {move: "up"};
     }
 }
 `);

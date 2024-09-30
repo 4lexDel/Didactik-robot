@@ -141,24 +141,24 @@ export default function GridSketch(p5: P5CanvasInstance) {
     }
 
     const compileUserCode = async (code: string) => {
-        let main = (x: number, y: number, iteration: number, map: any): any => { };
+        function* main(initX: number, initY: number, map: Array<Array<number>>): any {}
 
-        eval("main = " + code);
-
-        // first iteration
-        let i = 0;
+        eval("main="+code);
 
         let mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
 
         if (!mapCoords) return;
 
-        let result = main(mapCoords.x, mapCoords.y, i, map);
+        let iterator = main(mapCoords.x, mapCoords.y, map);
 
-        while (result) {
+        let result = iterator.next();
+        console.log(result);
+        
+        while (!result.done) {
             console.log(result);
-            i++;
+            if(!result.value) continue;
 
-            switch (result.move) {
+            switch (result.value.move) {
                 case "up":
                     robot.y -= dy;
                     break;
@@ -173,17 +173,15 @@ export default function GridSketch(p5: P5CanvasInstance) {
                     break;
             }
 
-            let newResult = await (async () => {
+            result = await (async () => {
                 return new Promise((res, rej) => {
                     setTimeout(() => {
-                        mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
-                        if (!mapCoords) return;
-                        res(main(mapCoords.x, mapCoords.y, i, map));
+                        // mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
+                        // if (!mapCoords) return;
+                        res(iterator.next());
                     }, 400);
                 });
             })();
-
-            result = newResult;
         }
         console.log("End");
     }
