@@ -138,34 +138,6 @@ export default function GridSketch(p5: P5CanvasInstance) {
     const updateMapCell = (x: number, y: number, val: number) => {
         if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
         map[x][y] = val;
-
-        // compileUserCode(`
-        // function(x, y, iteration, map) { // current state
-        //     if (x <= 4) {
-        //         return {
-        //             move: "right"
-        //         };    
-        //         // action set and realized
-        //     }
-        //     return null;
-        // }
-        // `);
-        // compileUserCode(`
-        // function(x, y, iteration, map) { // current state
-        //     if(iteration < 4) {
-        //         return {move: "right"};
-        //     }
-        //     if(iteration < 8) {
-        //         return {move: "down"};
-        //     }
-        //     if(iteration < 12) {
-        //         return {move: "left"};
-        //     }
-        //     if(iteration < 16) {
-        //         return {move: "up"};
-        //     }
-        // }
-        // `);
     }
 
     const compileUserCode = async (code: string) => {
