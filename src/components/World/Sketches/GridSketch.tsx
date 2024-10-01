@@ -160,16 +160,16 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
             switch (result.value.move) {
                 case "up":
-                    robot.y -= dy;
+                    !checkCollision(robot.x, robot.y-dy) && (robot.y -= dy);
                     break;
                 case "down":
-                    robot.y += dy;
+                    !checkCollision(robot.x, robot.y+dy) && (robot.y += dy);
                     break;
                 case "left":
-                    robot.x -= dx;
+                    !checkCollision(robot.x-dx, robot.y) && (robot.x -= dx);
                     break;
                 case "right":
-                    robot.x += dx;
+                    !checkCollision(robot.x+dx, robot.y) && (robot.x += dx);
                     break;
             }
 
@@ -184,6 +184,11 @@ export default function GridSketch(p5: P5CanvasInstance) {
             })();
         }
         console.log("End");
+    }
+
+    const checkCollision = (mx: number, my: number) => {
+        let mapCoords = convertMouseCoordsToMapCoords(mx, my);
+        return !mapCoords || mapCoords.x < 0 || mapCoords.x >= map.length || mapCoords.y < 0 || mapCoords.y >= map[0].length || map[mapCoords.x][mapCoords.y] === 1;
     }
 
     p5.draw = () => {
