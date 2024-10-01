@@ -17,6 +17,31 @@ class Robot {
     }
 }
 
+class Utils{
+    static resize2DArray(
+        array: Array<Array<number>>, 
+        n2: number, 
+        m2: number, 
+        defaultValue: number
+    ): Array<Array<number>> {
+        let resizedArray = array.slice(0, n2);
+    
+        for (let i = 0; i < n2; i++) {
+            if (i < array.length) {
+                resizedArray[i] = array[i].slice(0, m2);
+            } else {
+                resizedArray[i] = [];
+            }
+    
+            while (resizedArray[i].length < m2) {
+                resizedArray[i].push(defaultValue);
+            }
+        }
+    
+        return resizedArray;
+    }
+}
+
 export default function GridSketch(p5: P5CanvasInstance) {
     let currentWidth: number = 200;
     let currentHeight: number = 200;
@@ -36,19 +61,19 @@ export default function GridSketch(p5: P5CanvasInstance) {
     p5.setup = () => p5.createCanvas(currentWidth, currentHeight, p5.WEBGL);
 
     p5.updateWithProps = (props: SketchProps) => {
-        if ((props.width && props.height) && (currentWidth != props.width || currentHeight != props.height)) {
+        if ((props.width && props.height) && (currentWidth !== props.width || currentHeight !== props.height)) {
             currentWidth = Number(props.width);
             currentHeight = Number(props.height);
             resizeCanvas(true);
         }
 
-        if ((props.dx && Number(props.dx) > 0 && props.dy && Number(props.dy) > 0) && (dx != props.dx || dy != props.dy)) {
+        if ((props.dx && Number(props.dx) > 0 && props.dy && Number(props.dy) > 0) && (dx !== props.dx || dy !== props.dy)) {
             dx = Number(props.dx);
             dy = Number(props.dy);
             resizeCanvas(false);
         }
 
-        if (props.code && props.code != code) {
+        if (props.code && props.code !== code) {
             code = String(props.code);
 
             console.log("Compile code");
@@ -69,7 +94,10 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
     const initializeMap = () => {
         // console.log("initializeMap");
-        map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
+        if(!map) map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
+        else {
+            map = Utils.resize2DArray(map, nbX, nbY, 0);
+        }
     }
 
     p5.mousePressed = () => {
@@ -100,12 +128,12 @@ export default function GridSketch(p5: P5CanvasInstance) {
         }
     }
 
-    const convertMapCoordsToMouseCoords = (x: number, y: number) => {
-        return {
-            x: x * dx,
-            y: y * dy
-        }
-    }
+    // const convertMapCoordsToMouseCoords = (x: number, y: number) => {
+    //     return {
+    //         x: x * dx,
+    //         y: y * dy
+    //     }
+    // }
 
     const updateMapCell = (x: number, y: number, val: number) => {
         if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
@@ -187,7 +215,7 @@ export default function GridSketch(p5: P5CanvasInstance) {
     }
 
     p5.draw = () => {
-        p5.background(0, 200, 0);
+        p5.background(0, 0, 0);
         p5.push();
         p5.translate(-currentWidth / 2, -currentHeight / 2);
         // p5.normalMaterial();
@@ -204,14 +232,14 @@ export default function GridSketch(p5: P5CanvasInstance) {
                 for (let y = 0; y < map[x].length; y++) {
                     switch (map[x][y]) {
                         case 0:
-                            p5.fill(p5.color(0, 200, 0)); // Green
+                            p5.fill(p5.color(247, 220, 111)); // Dirt/dust
                             break;
 
                         case 1:
-                            p5.fill(p5.color(0, 0, 100)); // Dark blue
+                            p5.fill(p5.color(0, 0, 50)); // Dark blue       // COLLIDE
                             break;
                         case 2:
-                            p5.fill(p5.color(200, 0, 0, 127)); // Red
+                            p5.fill(p5.color(200, 100, 100)); // Red
                             break;
                     }
                     p5.rect(x * dx, y * dy, dx, dy);
