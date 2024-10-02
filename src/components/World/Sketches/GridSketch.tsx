@@ -117,6 +117,8 @@ export default function GridSketch(p5: P5CanvasInstance) {
     }
 
     const convertMouseCoordsToMapCoords = (x: number, y: number) => {
+        if(x < 0 || y < 0) return null;
+
         let mx = Math.trunc(x / dx);
         let my = Math.trunc(y / dy);
 
