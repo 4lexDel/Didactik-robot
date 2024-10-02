@@ -16,7 +16,12 @@ function IdePage() {
     return (
         <>
             <div>
-                <ToggleSwitch label="Mode" option1="Option 1" option2="Option 2"></ToggleSwitch>
+                <ToggleSwitch 
+                    label="Mode" 
+                    option1="Option 1" 
+                    option2="Option 2" 
+                    onChange={(optionSelected: number) => console.log("optionSelected "+optionSelected)}>
+                </ToggleSwitch>
             </div>
             <div className="flex-1 ide-page h-96 flex flex-col">
                 <PanelGroup direction="horizontal" className="border-2 border-text">
