@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Shared/Header/Header';
 import HomePage from './pages/HomePage';
 import IdePage from './pages/IdePage';
-import { ThemeContext } from './Contexts/ThemeContext';
+import { ThemeContext } from './contexts/ThemeContext';
 import { useState } from 'react';
 
 function App() {

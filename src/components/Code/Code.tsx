@@ -1,6 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useContext, useState } from "react";
-import { ThemeContext } from "../../Contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 function Code(props: {onRun: (code: string | undefined) => void}) {
   const [code, setCode] = useState<string | undefined>(
