@@ -13,21 +13,19 @@ function IdePage() {
         setCode(code+"// Build n°"+buildNumber);
     }
 
+    const [mode, setMode] = useState(1);
+
     return (
         <>
             <div>
-                <ToggleSwitch 
+                <ToggleSwitch
                     label="Mode" 
-                    option1="Option 1" 
-                    option2="Option 2" 
-                    onChange={(optionSelected: number) => console.log("optionSelected "+optionSelected)}>
-                </ToggleSwitch>
+                    option1="Developer" 
+                    option2="Creator" 
+                    onChange={(optionSelected: number) => setMode(optionSelected)}></ToggleSwitch>
             </div>
             <div className="flex-1 ide-page h-96 flex flex-col">
                 <PanelGroup direction="horizontal" className="border-2 border-text">
-                    <Panel defaultSize={20} minSize={10}>
-                        <center>Environement</center>
-                    </Panel>
                     <PanelResizeHandle className="border w-1 border-text"/>
                     <Panel minSize={10}>
                         <PanelGroup direction="vertical">
@@ -35,15 +33,18 @@ function IdePage() {
                                 <World code={code}></World>
                             </Panel>
                             <PanelResizeHandle className="border h-1 border-text" />
-                            <Panel minSize={10}>
+                            <Panel hidden={mode==2} minSize={10}>
                                 <center>Console</center>
                             </Panel>
                         </PanelGroup>
                     </Panel>
                     <PanelResizeHandle className="border w-1 border-text" />
-                    <Panel defaultSize={20} minSize={10} className="overflow-auto">
+                    <Panel hidden={mode==2}  defaultSize={20} minSize={10} className="overflow-auto">
                         <center>Editeur</center>
                         <Code onRun={handleCodeRun}></Code>
+                    </Panel>
+                    <Panel hidden={mode==1} defaultSize={20} minSize={10}>
+                        <center>Environement</center>
                     </Panel>
                 </PanelGroup>
             </div>
