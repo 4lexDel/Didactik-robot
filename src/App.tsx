@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Shared/Header/Header';
 import HomePage from './pages/HomePage';
 import IdePage from './pages/IdePage';
@@ -15,9 +15,10 @@ function App() {
         
         <ThemeContext.Provider value={theme}>
           <Routes>
-            <Route path='/' element={<HomePage/>}/>
-            <Route path='/home' element={<HomePage/>}/>
-            <Route path='/ide' element={<IdePage/>}/>
+            <Route path='/' element={<Navigate to="/ide/sandbox"/>}/>
+            <Route path='/ide' element={<Navigate to="/ide/sandbox"/>}/>
+            <Route path='/ide/:category' element={<IdePage/>}/>
+            <Route path='/about' element={<HomePage/>}/>
           </Routes>
         </ThemeContext.Provider>
       </Router>

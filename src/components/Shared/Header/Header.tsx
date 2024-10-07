@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Header({onThemeToggle}: any) {
     const [darkMode, setDarkMode] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     // Check local storage for saved theme on component mount
     useEffect(() => {
@@ -29,6 +33,10 @@ function Header({onThemeToggle}: any) {
         }
     };
 
+    const activeLink = (link: string) => {
+        return window.location.pathname === link ? " underline" : "";
+    }
+
     return (
         <>
             <nav className="bg-background border-b items-center
@@ -53,16 +61,17 @@ function Header({onThemeToggle}: any) {
                 ${isMenuOpen ? "" : "hidden"} col-span-3 justify-self-end order-6`}>
                     <ul className="flex flex-col text-xl lg:flex-row">
                         <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 rounded underline text-text" aria-current="page">Home</a>
+                            <a href="#" className={"block py-2 pr-6 pl-3 rounded text-text"+activeLink("/ide/sandbox")}
+                            onClick={() => navigate("/ide/sandbox")} aria-current="page">Sandbox</a>
                         </li>
                         <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 rounded text-text">Company</a>
+                            <a href="#" className={"block py-2 pr-6 pl-3 rounded text-text"+activeLink("/ide/games")}
+                            onClick={() => navigate("/ide/games")}>Games</a>
                         </li>
+                        {/* window.location.pathname */}
                         <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 rounded text-text">Features</a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 rounded text-text">Contact</a>
+                            <a href="#" className={"block py-2 pr-6 pl-3 rounded text-text"+activeLink("/about")}
+                            onClick={() => navigate("/about")}>About</a>
                         </li>
                     </ul>
                 </div>

@@ -3,6 +3,7 @@ import Code from "../components/Code/Code";
 import World from "../components/World/World";
 import { useState } from "react";
 import ToggleSwitch from "../components/Shared/ToggleSwitch/ToggleSwitch";
+import { useParams } from "react-router-dom";
 
 function IdePage() {
     const [code, setCode] = useState<string | undefined>(undefined);
@@ -15,6 +16,9 @@ function IdePage() {
 
     const [mode, setMode] = useState(1);
 
+    const { category } = useParams();
+    console.log(category);
+    
     return (
         <>
             <div>
@@ -33,17 +37,17 @@ function IdePage() {
                                 <World code={code}></World>
                             </Panel>
                             <PanelResizeHandle className="border h-1 border-text" />
-                            <Panel hidden={mode==2} minSize={10}>
+                            <Panel hidden={mode===2} minSize={10}>
                                 <center>Console</center>
                             </Panel>
                         </PanelGroup>
                     </Panel>
                     <PanelResizeHandle className="border w-1 border-text" />
-                    <Panel hidden={mode==2}  defaultSize={20} minSize={10} className="overflow-auto">
+                    <Panel hidden={mode===2}  defaultSize={20} minSize={10} className="overflow-auto">
                         <center>Editeur</center>
                         <Code onRun={handleCodeRun}></Code>
                     </Panel>
-                    <Panel hidden={mode==1} defaultSize={20} minSize={10}>
+                    <Panel hidden={mode===1} defaultSize={20} minSize={10}>
                         <center>Environement</center>
                     </Panel>
                 </PanelGroup>
