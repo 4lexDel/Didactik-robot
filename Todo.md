@@ -21,6 +21,8 @@
 
 
 ## Modes
+    - Design
+        * Refonte panel
     - Prerequistes
         * Add a Switch button
         * Change the panels
@@ -36,3 +38,6 @@
         * Coding area enabled
         * Environment area disabled
         * Can compile codes
+    - Page category:
+        * Sandbox
+        * Games
