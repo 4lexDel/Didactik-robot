@@ -1,7 +1,7 @@
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import Code from "../components/Code/Code";
 import World from "../components/World/World";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToggleSwitch from "../components/Shared/ToggleSwitch/ToggleSwitch";
 import { useParams } from "react-router-dom";
 
@@ -17,7 +17,11 @@ function IdePage() {
     const [mode, setMode] = useState(1);
 
     const { category } = useParams();
-    console.log(category);
+    
+    useEffect(() => {
+        console.log(category);
+        setMode(1);
+    }, [category]);
     
     return (
         <>
@@ -26,6 +30,8 @@ function IdePage() {
                     label="Mode" 
                     option1="Developer" 
                     option2="Creator" 
+                    defaultValue={mode===1}
+                    disabled={category !== "sandbox"}
                     onChange={(optionSelected: number) => setMode(optionSelected)}></ToggleSwitch>
             </div>
             <div className="flex-1 ide-page h-96 flex flex-col">
