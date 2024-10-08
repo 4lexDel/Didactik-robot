@@ -1,48 +1,43 @@
 # TODO:
 
-## Action on block
-    - Grab/place
+## World
+    - UX/UI
+        * Change the zoom level
+    - Action on block
+        * Grab/place
+    - Design
+        * Robot (eyes to add the directional aspect)
+        * Find spritesheet 
 
-## Code compilation 
-    - Manage spam
-    - Intellij
-    - Run button focus bug
-
-## Design
-    - Robot (eyes to add the directional aspect)
-    - Find spritesheet
-
-## Templates examples
-    - Code/world proposed (Shared button?)
+## Code
+    - Code compilation 
+        * Manage spam
+        * Intellij
+        * Run button focus bug
 
 ## Help tools
-    - On the first 'connection' add steps modal to guide the user
+    - On the first 'connection' add steps modal to guide the user on the different pages and mode
     - Adding of tooltips
 
-
 ## Modes
-    - Design
-        * Refonte panel
-    - Prerequistes
-        * Add a Switch button
-        * Change the panels
-            + Middle = World whatever the mode
-            + Left = Tools area = the content depend of the mode selected
-            + Right = main content linked to the mode (code editor for dev mode, nothing for the creator mode)
-            + Bottom = console for dev mode else nothing
     - Creator: 
-        * Coding area disabled
         * Environment area enabled
+        * Coding area disabled
         * Can edit the world (CRUD it => save?)
-    - Dev
+    - Developer
         * Coding area enabled
         * Environment area disabled
         * Can compile codes
-    - Page category:
-        * Sandbox
-        * Games
-            + Games list => Cards that propose different scenario
-            + Scenario:
-                - Environment mode disabled (Mode switch disabled)
-                - Preset of environments
-                - Goals to complete (Go from one point to another) 
+
+## Page category:
+    - Sandbox
+        * Share feature
+        * Allow switch mode
+    - Games
+        * Environment mode disabled (Mode switch disabled)
+        * Games list => Cards that propose different scenario
+        * Scenario:
+            + Preset of environments
+                - Basics to understand the concept 
+                - Users sharing
+            + Goals to complete (Go from one point to another) 
