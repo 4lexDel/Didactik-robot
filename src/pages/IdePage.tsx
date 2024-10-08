@@ -5,9 +5,13 @@ import { useEffect, useState } from "react";
 import ToggleSwitch from "../components/Shared/ToggleSwitch/ToggleSwitch";
 import { useParams } from "react-router-dom";
 import BlocSelection from "../components/World/BlocSelection/BlocSelection";
+import Block from "../models/Block";
 
 function IdePage() {
     const [code, setCode] = useState<string | undefined>(undefined);
+    const [mode, setMode] = useState(1);
+    const [blockSelected, setBlockSelected] = useState<Block | null>();
+
     let buildNumber = 0;
 
     const handleCodeRun = (code: string | undefined) => {
@@ -15,14 +19,15 @@ function IdePage() {
         setCode(code+"// Build n°"+buildNumber);
     }
 
-    const [mode, setMode] = useState(1);
-
     const { category } = useParams();
     
     useEffect(() => {
-        console.log(category);
         setMode(1);
     }, [category]);
+
+    const onBlockSelected = (block: Block) => {
+        setBlockSelected(block);
+    }
     
     return (
         <>
@@ -40,7 +45,7 @@ function IdePage() {
                     <Panel minSize={10}>
                         <PanelGroup direction="vertical">
                             <Panel defaultSize={80} minSize={10}>
-                                <World code={code}></World>
+                                <World code={code} editBlock={blockSelected} readonly={mode===1}></World>
                             </Panel>
                             <PanelResizeHandle />
                             <Panel hidden={mode===2} minSize={10}>
@@ -56,7 +61,7 @@ function IdePage() {
                         </Panel>
                         :
                         <Panel defaultSize={20} minSize={10}>
-                            <BlocSelection></BlocSelection>
+                            <BlocSelection onSelect={onBlockSelected}></BlocSelection>
                         </Panel>
                     }
                 </PanelGroup>

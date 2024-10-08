@@ -1,4 +1,6 @@
 import { P5CanvasInstance, SketchProps } from "react-p5-wrapper";
+import Block from "../../../models/Block";
+import { getCssVariableValue } from "../../../utils";
 
 class Robot {
     x: number;
@@ -17,27 +19,27 @@ class Robot {
     }
 }
 
-class Utils{
+class Utils {
     static resize2DArray(
-        array: Array<Array<number>>, 
-        n2: number, 
-        m2: number, 
+        array: Array<Array<number>>,
+        n2: number,
+        m2: number,
         defaultValue: number
     ): Array<Array<number>> {
         let resizedArray = array.slice(0, n2);
-    
+
         for (let i = 0; i < n2; i++) {
             if (i < array.length) {
                 resizedArray[i] = array[i].slice(0, m2);
             } else {
                 resizedArray[i] = [];
             }
-    
+
             while (resizedArray[i].length < m2) {
                 resizedArray[i].push(defaultValue);
             }
         }
-    
+
         return resizedArray;
     }
 }
@@ -55,8 +57,10 @@ export default function GridSketch(p5: P5CanvasInstance) {
     let nbY: number = -1;
 
     let robot: Robot = new Robot(0, 0);
-
     let code: string;
+    let editBlock: Block;
+
+    let readonly = true;
 
     p5.setup = () => p5.createCanvas(currentWidth, currentHeight, p5.WEBGL);
 
@@ -79,6 +83,15 @@ export default function GridSketch(p5: P5CanvasInstance) {
             console.log("Compile code");
             compileUserCode(code);
         }
+
+        if (props.editBlock) {
+            editBlock = props.editBlock as Block;
+            // editBlock.color = getCssVariableValue("--"+editBlock.color);
+        }
+
+        if(props.readonly !== null && props.readonly !== undefined && props.readonly !== readonly) {
+            readonly = Boolean(props.readonly);            
+        }
     };
 
     const resizeCanvas = (areNewDims: Boolean) => {
@@ -94,30 +107,31 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
     const initializeMap = () => {
         // console.log("initializeMap");
-        if(!map) map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
+        if (!map) map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
         else {
             map = Utils.resize2DArray(map, nbX, nbY, 0);
         }
     }
 
     p5.mousePressed = () => {
-        console.log("Mousse pressed");
-        console.log(`X=${p5.mouseX} Y=${p5.mouseY} Button=${p5.mouseButton}`);
-
-        if (p5.mouseButton === "left") {
+        // console.log("Mousse pressed");
+        // console.log(`X=${p5.mouseX} Y=${p5.mouseY} Button=${p5.mouseButton}`);
+        console.log(editBlock);
+        
+        if (p5.mouseButton === "left" && editBlock && !readonly) {
             let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
 
-            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, (map[mapCoords.x][mapCoords.y] + 1) % 3);
+            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, editBlock.id);
         }
         else {
+            // Remove for prod
             robot.x = 0;
             robot.y = 0;
         }
-
     }
 
     const convertMouseCoordsToMapCoords = (x: number, y: number) => {
-        if(x < 0 || y < 0) return null;
+        if (x < 0 || y < 0) return null;
 
         let mx = Math.trunc(x / dx);
         let my = Math.trunc(y / dy);
@@ -130,22 +144,15 @@ export default function GridSketch(p5: P5CanvasInstance) {
         }
     }
 
-    // const convertMapCoordsToMouseCoords = (x: number, y: number) => {
-    //     return {
-    //         x: x * dx,
-    //         y: y * dy
-    //     }
-    // }
-
     const updateMapCell = (x: number, y: number, val: number) => {
         if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
         map[x][y] = val;
     }
 
     const compileUserCode = async (code: string) => {
-        function* main(initX: number, initY: number, map: Array<Array<number>>): any {}
+        function* main(initX: number, initY: number, map: Array<Array<number>>): any { }
 
-        eval("main="+code);
+        eval("main=" + code);
 
         let mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
 
@@ -155,23 +162,23 @@ export default function GridSketch(p5: P5CanvasInstance) {
 
         let result = iterator.next();
         console.log(result);
-        
+
         while (!result.done) {
             console.log(result);
-            if(!result.value) continue;
+            if (!result.value) continue;
 
             switch (result.value.move) {
                 case "up":
-                    !checkCollision(robot.x, robot.y-dy) && (robot.y -= dy);
+                    !checkCollision(robot.x, robot.y - dy) && (robot.y -= dy);
                     break;
                 case "down":
-                    !checkCollision(robot.x, robot.y+dy) && (robot.y += dy);
+                    !checkCollision(robot.x, robot.y + dy) && (robot.y += dy);
                     break;
                 case "left":
-                    !checkCollision(robot.x-dx, robot.y) && (robot.x -= dx);
+                    !checkCollision(robot.x - dx, robot.y) && (robot.x -= dx);
                     break;
                 case "right":
-                    !checkCollision(robot.x+dx, robot.y) && (robot.x += dx);
+                    !checkCollision(robot.x + dx, robot.y) && (robot.x += dx);
                     break;
             }
 
@@ -213,12 +220,20 @@ export default function GridSketch(p5: P5CanvasInstance) {
                         case 0:
                             p5.fill(p5.color(247, 220, 111)); // Dirt/dust
                             break;
-
                         case 1:
                             p5.fill(p5.color(0, 0, 50)); // Dark blue       // COLLIDE
                             break;
                         case 2:
                             p5.fill(p5.color(200, 100, 100)); // Red
+                            break;
+                        case 3:
+                            p5.fill(p5.color(64, 255, 0)); // Start
+                            break;
+                        case 4:
+                            p5.fill(p5.color(255, 162, 0)); // Inter
+                            break;
+                        case 5:
+                            p5.fill(p5.color(255, 0, 0)); // End
                             break;
                     }
                     p5.rect(x * dx, y * dy, dx, dy);

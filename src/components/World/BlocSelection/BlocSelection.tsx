@@ -1,41 +1,36 @@
 // import { useEffect, useState } from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Bloc from "./Bloc";
+import Block from "../../../models/Block";
+import BlockType from "../../../models/BlockType";
 
-type Block = {
-    label: string;
-    color: string;
-    selected: boolean;
-}
-
-type BlockType = {
-    obstacle: Block;
-    inter: Block;
-    start: Block;
-    end: Block;
-    ground: Block;
-    path: Block;
-}
-
-export default function BlocSelection(props: {}) {
+export default function BlocSelection(props: {onSelect: (block: Block) => void}) {
     const [selectionData, setSelectionData] = useState<BlockType>(
         {
-            obstacle: { label: "Obstacle", color: "obstacle", selected: true },
-            inter: { label: "Checkpoint", color: "inter", selected: false },
-            start: { label: "Start", color: "start", selected: false },
-            end: { label: "End", color: "end", selected: false },
-            ground: { label: "Ground", color: "ground", selected: false },
-            path: { label: "Path", color: "path", selected: false },
+            obstacle: { label: "Obstacle", color: "obstacle", selected: false, id: 1 },
+            inter: { label: "Checkpoint", color: "inter", selected: false, id: 4 },
+            start: { label: "Start", color: "start", selected: false, id: 3 },
+            end: { label: "End", color: "end", selected: false, id: 5 },
+            ground: { label: "Ground", color: "ground", selected: false, id: 0 },
+            path: { label: "Path", color: "path", selected: false, id: 2 },
         }
     );
+
+    useEffect(() => {
+        // Default selection
+        onBlockSelect("obstacle");
+    }, []);
 
     const onBlockSelect = (keyInput: string) => {
         let key: keyof BlockType;
         for (key in selectionData) {
             const item = selectionData[key];
             
-            if(key === keyInput) item.selected = true;
+            if(key === keyInput){
+                item.selected = true;
+                props.onSelect(item);
+            } 
             else item.selected = false;
         }
 
