@@ -21,7 +21,11 @@
 
 ## Modes
     - Creator: 
-        * Environment area enabled
+        * Environment area enabled - bloc selection
+            + Obstacle
+            + Mark
+            + Nothing
+            + Start (robot first position) + end + intermediate points 
         * Coding area disabled
         * Can edit the world (CRUD it => save?)
     - Developer
