@@ -20,6 +20,7 @@ html {
     --inter: rgb(255, 162, 0);
     --ground: rgb(247, 220, 111);
     --path: rgb(200, 100, 100);
+    --obstacle: rgb(0, 0, 50);
 
     --text: #0a0605;
     --text-50: #f6f0ee;

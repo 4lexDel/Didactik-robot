@@ -18,6 +18,7 @@ module.exports = {
         'end': 'var(--end)',
         'ground': 'var(--ground)',
         'path': 'var(--path)',
+        'obstacle': 'var(--obstacle)',
         'info': 'var(--info)', 
         'text': {
           DEFAULT: 'var(--text)',
