@@ -41,3 +41,8 @@
     - Page category:
         * Sandbox
         * Games
+            + Games list => Cards that propose different scenario
+            + Scenario:
+                - Environment mode disabled (Mode switch disabled)
+                - Preset of environments
+                - Goals to complete (Go from one point to another) 
