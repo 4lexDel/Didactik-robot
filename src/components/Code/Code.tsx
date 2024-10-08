@@ -27,7 +27,7 @@ function Code(props: {onRun: (code: string | undefined) => void}) {
 
   return (
     <>
-      <button onClick={() => props.onRun(code)} className="bg-primary w-full text-text font-bold py-3 px-8 rounded text">Run</button>
+      <button onClick={() => props.onRun(code)} className="bg-primary w-full text-text font-bold py-3 px-8 mb-4 rounded text">Run</button>
       <Editor
         height="100%"
         language="javascript"

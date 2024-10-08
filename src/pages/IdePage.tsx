@@ -30,26 +30,28 @@ function IdePage() {
             </div>
             <div className="flex-1 ide-page h-96 flex flex-col">
                 <PanelGroup direction="horizontal" className="border-2 border-text">
-                    <PanelResizeHandle className="border w-1 border-text"/>
                     <Panel minSize={10}>
                         <PanelGroup direction="vertical">
                             <Panel defaultSize={80} minSize={10}>
                                 <World code={code}></World>
                             </Panel>
-                            <PanelResizeHandle className="border h-1 border-text" />
+                            <PanelResizeHandle />
                             <Panel hidden={mode===2} minSize={10}>
                                 <center>Console</center>
                             </Panel>
                         </PanelGroup>
                     </Panel>
-                    <PanelResizeHandle className="border w-1 border-text" />
-                    <Panel hidden={mode===2}  defaultSize={20} minSize={10} className="overflow-auto">
-                        <center>Editeur</center>
-                        <Code onRun={handleCodeRun}></Code>
-                    </Panel>
-                    <Panel hidden={mode===1} defaultSize={20} minSize={10}>
-                        <center>Environement</center>
-                    </Panel>
+                    <PanelResizeHandle />
+                    {mode===1 ?
+                        <Panel defaultSize={35} minSize={10} className="overflow-auto">
+                            <center>Editeur</center>
+                            <Code onRun={handleCodeRun}></Code>
+                        </Panel>
+                        :
+                        <Panel defaultSize={20} minSize={10}>
+                            <center>Environement</center>
+                        </Panel>
+                    }
                 </PanelGroup>
             </div>
         </>
