@@ -13,6 +13,11 @@ module.exports = {
     },
     extend: {
       colors: {
+        'start': 'var(--start)',
+        'inter': 'var(--inter)',
+        'end': 'var(--end)',
+        'ground': 'var(--ground)',
+        'path': 'var(--path)',
         'info': 'var(--info)', 
         'text': {
           DEFAULT: 'var(--text)',

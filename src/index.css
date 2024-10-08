@@ -15,6 +15,12 @@ html {
 
 @layer base {
   :root {    
+    --start: rgb(64, 255, 0);
+    --end: rgb(255, 0, 0);
+    --inter: rgb(255, 162, 0);
+    --ground: rgb(247, 220, 111);
+    --path: rgb(200, 100, 100);
+
     --text: #0a0605;
     --text-50: #f6f0ee;
     --text-100: #eee0dd;
@@ -82,7 +88,7 @@ html {
     
     --info: #c731f9;
   }
-  .dark {
+  .dark {    
     --text: #faf6f5;
     --text-50: #110a09;
     --text-100: #221411;

@@ -4,6 +4,7 @@ import World from "../components/World/World";
 import { useEffect, useState } from "react";
 import ToggleSwitch from "../components/Shared/ToggleSwitch/ToggleSwitch";
 import { useParams } from "react-router-dom";
+import BlocSelection from "../components/World/BlocSelection/BlocSelection";
 
 function IdePage() {
     const [code, setCode] = useState<string | undefined>(undefined);
@@ -55,7 +56,7 @@ function IdePage() {
                         </Panel>
                         :
                         <Panel defaultSize={20} minSize={10}>
-                            <center>Environement</center>
+                            <BlocSelection></BlocSelection>
                         </Panel>
                     }
                 </PanelGroup>
