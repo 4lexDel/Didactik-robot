@@ -7,5 +7,6 @@ type BlockType = {
     end: Block;
     ground: Block;
     path: Block;
+    wood: Block;
 }
 export default BlockType;

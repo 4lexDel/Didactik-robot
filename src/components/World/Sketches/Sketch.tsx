@@ -300,6 +300,9 @@ export default function Sketch(p5: P5CanvasInstance) {
                         case 5:
                             p5.fill(p5.color(255, 0, 0)); // End
                             break;
+                        case 6:
+                            p5.fill(p5.color(124, 64, 0)); // Wood
+                            break;
                     }
                     p5.rect(x * dx, y * dy, dx, dy);
                 }

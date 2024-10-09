@@ -14,6 +14,7 @@ export default function BlocSelection(props: {onSelect: (block: Block) => void})
             end: { label: "End", color: "end", selected: false, id: 5 },
             ground: { label: "Ground", color: "ground", selected: false, id: 0 },
             path: { label: "Path", color: "path", selected: false, id: 2 },
+            wood: { label: "Wood", color: "wood", selected: false, id: 6 }
         }
     );
 
@@ -57,6 +58,13 @@ export default function BlocSelection(props: {onSelect: (block: Block) => void})
                         <Bloc onClick={() => onBlockSelect("ground")} selected={selectionData["ground"].selected} color={selectionData["ground"].color}>{selectionData["ground"].label}</Bloc>
                         <Bloc onClick={() => onBlockSelect("path")} selected={selectionData["path"].selected} color={selectionData["path"].color}>{selectionData["path"].label}</Bloc>
                         <Bloc onClick={() => onBlockSelect("obstacle")} selected={selectionData["obstacle"].selected} color={selectionData["obstacle"].color}>{selectionData["obstacle"].label}</Bloc>
+                    </div>
+                </div>
+
+                <div className="flex flex-col">
+                    <p className="text-center text-text text-md">Action block</p>
+                    <div className="flex p-2 size-full gap-4 flex-wrap justify-center items-start content-start">
+                        <Bloc onClick={() => onBlockSelect("wood")} selected={selectionData["wood"].selected} color={selectionData["wood"].color}>{selectionData["wood"].label}</Bloc>
                     </div>
                 </div>
             </div>

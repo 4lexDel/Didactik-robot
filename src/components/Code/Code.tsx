@@ -49,7 +49,7 @@ function Code(props: {onRun: (code: string | undefined) => void, worldState: str
           // fontSize: "16px",
           formatOnType: true,
           // autoClosingBrackets: true,        
-          minimap: { scale: 2 }
+          minimap: { scale: 1 }
         }}
       />
     </>

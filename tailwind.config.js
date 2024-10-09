@@ -19,6 +19,7 @@ module.exports = {
         'ground': 'var(--ground)',
         'path': 'var(--path)',
         'obstacle': 'var(--obstacle)',
+        'wood': 'var(--wood)',
         'info': 'var(--info)', 
         'text': {
           DEFAULT: 'var(--text)',
