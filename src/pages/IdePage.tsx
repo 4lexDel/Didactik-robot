@@ -48,13 +48,17 @@ function IdePage() {
                             <Panel defaultSize={80} minSize={10}>
                                 <World code={code} editBlock={blockSelected} readonly={mode === 1} onStateChange={(state: string) => setWorldState(state)}></World>
                             </Panel>
-                            <PanelResizeHandle />
-                            <Panel hidden={mode===2} minSize={10}>
-                                <center>Console</center>
-                            </Panel>
+                            {mode === 1 &&
+                                <>
+                                    <PanelResizeHandle />
+                                    <Panel minSize={10}>
+                                        <center>Console</center>
+                                    </Panel>
+                                </>
+                            }
                         </PanelGroup>
                     </Panel>
-                    <PanelResizeHandle />
+                    <PanelResizeHandle className="overflow-auto w-1 z-index-1"/>
                     {mode===1 ?
                         <Panel defaultSize={30} minSize={10} className="overflow-auto">
                             <center>Editeur</center>
