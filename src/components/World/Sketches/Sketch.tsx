@@ -106,7 +106,13 @@ export default function Sketch(p5: P5CanvasInstance) {
 
     const initializeMap = () => {
         // console.log("initializeMap");
-        if (!map) map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
+        if (!map){
+            map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
+            // Start
+            map[0][0] = 3;
+            robot.x = 0;
+            robot.y = 0;
+        }
         else {
             map = Utils.resize2DArray(map, nbX, nbY, 0);
         }
@@ -120,11 +126,23 @@ export default function Sketch(p5: P5CanvasInstance) {
         if(!readonly){
             let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
             
-            if (p5.mouseButton === "left" && editBlock) {
-                mapCoords && updateMapCell(mapCoords.x, mapCoords.y, editBlock.id);
-            }
-            else {
-                mapCoords && updateMapCell(mapCoords.x, mapCoords.y, 0);
+            if(mapCoords){
+                if (p5.mouseButton === "left" && editBlock) {
+                    // Case of the start block or end block, remove all the previous one
+                    if(editBlock.id === 3){
+                        replaceMapCells(editBlock.id, 0);
+                        robot.x = mapCoords.x * dx;
+                        robot.y = mapCoords.y * dy;
+                    }
+                    else if(editBlock.id === 5){
+                        replaceMapCells(editBlock.id, 0);
+                    }
+                    
+                    if(map[mapCoords.x][mapCoords.y] !== 3) updateMapCell(mapCoords.x, mapCoords.y, editBlock.id);
+                }
+                else {
+                    if(map[mapCoords.x][mapCoords.y] !== 3) updateMapCell(mapCoords.x, mapCoords.y, 0);
+                }
             }
         }
     }
@@ -140,6 +158,14 @@ export default function Sketch(p5: P5CanvasInstance) {
         return {
             x: mx,
             y: my
+        }
+    }
+
+    const replaceMapCells = (targetId: number, newId: number) => {
+        for (let x = 0; x < map.length; x++) {
+            for (let y = 0; y < map[x].length; y++) {
+                if(map[x][y] === targetId) map[x][y] = newId;
+            }
         }
     }
 
