@@ -1,6 +1,8 @@
 import { P5CanvasInstance, SketchProps } from "react-p5-wrapper";
 import Block from "../../../models/Block";
 
+type StateCallback = (state: string) => void;
+
 class Robot {
     x: number;
     y: number;
@@ -60,10 +62,13 @@ export default function Sketch(p5: P5CanvasInstance) {
     let editBlock: Block;
 
     let readonly = true;
+    let isCodeRunning: boolean = false;
+
+    let onStateChange: StateCallback | null = null;
 
     p5.setup = () => p5.createCanvas(currentWidth, currentHeight, p5.WEBGL);
 
-    p5.updateWithProps = (props: SketchProps) => {
+    p5.updateWithProps = async (props: SketchProps) => {
         if ((props.width && props.height) && (currentWidth !== props.width || currentHeight !== props.height)) {
             currentWidth = Number(props.width);
             currentHeight = Number(props.height);
@@ -76,11 +81,19 @@ export default function Sketch(p5: P5CanvasInstance) {
             resizeCanvas(false);
         }
 
-        if (props.code && props.code !== code) {
+        if(props.onStateChange && props.onStateChange !== onStateChange) {
+            onStateChange = props.onStateChange as StateCallback;
+        }
+
+        if (props.code && props.code !== code && !isCodeRunning) {
             code = String(props.code);
 
             console.log("Compile code");
-            compileUserCode(code);
+            isCodeRunning = true;
+            await compileUserCode(code);
+
+            acknowledgeEnd();
+            isCodeRunning = false;
         }
 
         if (props.editBlock) {
@@ -120,9 +133,7 @@ export default function Sketch(p5: P5CanvasInstance) {
 
     p5.mousePressed = () => {
         // console.log("Mousse pressed");
-        // console.log(`X=${p5.mouseX} Y=${p5.mouseY} Button=${p5.mouseButton}`);
-        console.log(editBlock);
-        
+        // console.log(`X=${p5.mouseX} Y=${p5.mouseY} Button=${p5.mouseButton}`);        
         if(!readonly){
             let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
             
@@ -137,7 +148,7 @@ export default function Sketch(p5: P5CanvasInstance) {
                     else if(editBlock.id === 5){
                         replaceMapCells(editBlock.id, 0);
                     }
-                    
+
                     if(map[mapCoords.x][mapCoords.y] !== 3) updateMapCell(mapCoords.x, mapCoords.y, editBlock.id);
                 }
                 else {
@@ -174,50 +185,79 @@ export default function Sketch(p5: P5CanvasInstance) {
         map[x][y] = val;
     }
 
-    const compileUserCode = async (code: string) => {
-        function* main(initX: number, initY: number, map: Array<Array<number>>): any { }
+    const compileUserCode = (code: string) => {
+        return new Promise(async (res, rej) => {
+            onStateChange && onStateChange("running");
 
-        eval("main=" + code);
+            function* main(initX: number, initY: number, map: Array<Array<number>>): any { }
 
-        let mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
+            eval("main=" + code);
 
-        if (!mapCoords) return;
+            let mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
 
-        let iterator = main(mapCoords.x, mapCoords.y, map);
+            if (!mapCoords) return;
 
-        let result = iterator.next();
-        console.log(result);
+            let iterator = main(mapCoords.x, mapCoords.y, map);
 
-        while (!result.done) {
+            let result = iterator.next();
             console.log(result);
-            if (!result.value) continue;
 
-            switch (result.value.move) {
-                case "up":
-                    !checkCollision(robot.x, robot.y - dy) && (robot.y -= dy);
-                    break;
-                case "down":
-                    !checkCollision(robot.x, robot.y + dy) && (robot.y += dy);
-                    break;
-                case "left":
-                    !checkCollision(robot.x - dx, robot.y) && (robot.x -= dx);
-                    break;
-                case "right":
-                    !checkCollision(robot.x + dx, robot.y) && (robot.x += dx);
-                    break;
+            while (!result.done) {
+                console.log(result);
+                if (!result.value) continue;
+
+                switch (result.value.move) {
+                    case "up":
+                        !checkCollision(robot.x, robot.y - dy) && (robot.y -= dy);
+                        break;
+                    case "down":
+                        !checkCollision(robot.x, robot.y + dy) && (robot.y += dy);
+                        break;
+                    case "left":
+                        !checkCollision(robot.x - dx, robot.y) && (robot.x -= dx);
+                        break;
+                    case "right":
+                        !checkCollision(robot.x + dx, robot.y) && (robot.x += dx);
+                        break;
+                }
+
+                result = await (async () => {
+                    return new Promise((res, rej) => {
+                        setTimeout(() => {
+                            // mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
+                            // if (!mapCoords) return;
+                            res(iterator.next());
+                        }, 400);
+                    });
+                })();
+            }
+            console.log("End");
+            res("end");
+        });
+    }
+
+    const acknowledgeEnd = () => {
+        setTimeout(() => {
+            // When it's over
+            const startCoords = getStartPointCoords();
+
+            if(startCoords) {
+                robot.x = startCoords.x;
+                robot.y = startCoords.y;
             }
 
-            result = await (async () => {
-                return new Promise((res, rej) => {
-                    setTimeout(() => {
-                        // mapCoords = convertMouseCoordsToMapCoords(robot.x, robot.y);
-                        // if (!mapCoords) return;
-                        res(iterator.next());
-                    }, 400);
-                });
-            })();
+            onStateChange && onStateChange("stopped");
+        }, 1000);
+    }
+
+    const getStartPointCoords = () => {
+        for (let x = 0; x < map.length; x++) {
+            for (let y = 0; y < map[x].length; y++) {
+                if(map[x][y] === 3) return {x, y};
+            }
         }
-        console.log("End");
+
+        return null;
     }
 
     const checkCollision = (mx: number, my: number) => {

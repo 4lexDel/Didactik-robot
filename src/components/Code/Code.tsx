@@ -2,7 +2,7 @@ import Editor from "@monaco-editor/react";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
-function Code(props: {onRun: (code: string | undefined) => void}) {
+function Code(props: {onRun: (code: string | undefined) => void, worldState: string}) {
   const [code, setCode] = useState<string | undefined>(
 `function* main(initX, initY, map) {
     for (let i = 0; i < 4; i++) {
@@ -25,9 +25,19 @@ function Code(props: {onRun: (code: string | undefined) => void}) {
 
   const theme = useContext(ThemeContext);
 
+  const onRunClick = () => {
+    if(props.worldState === "stopped") props.onRun(code);
+  }
+
   return (
     <>
-      <button onClick={() => props.onRun(code)} className="bg-primary w-full text-text font-bold py-3 px-8 mb-4 rounded text">Run</button>
+      <button onClick={onRunClick} className={`${props.worldState === "running" ? "bg-primary" : "bg-green-600"} w-full text-text font-bold py-3 px-8 mb-4 rounded text`}>
+        {props.worldState === "running" ?
+          "Running..."
+          :
+          "Run"
+        }
+      </button>
       <Editor
         height="100%"
         language="javascript"

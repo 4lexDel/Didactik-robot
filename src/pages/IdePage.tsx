@@ -11,6 +11,7 @@ function IdePage() {
     const [code, setCode] = useState<string | undefined>(undefined);
     const [mode, setMode] = useState(1);
     const [blockSelected, setBlockSelected] = useState<Block | null>();
+    const [worldState, setWorldState] = useState("stopped");
 
     let buildNumber = 0;
 
@@ -45,7 +46,7 @@ function IdePage() {
                     <Panel minSize={10}>
                         <PanelGroup direction="vertical">
                             <Panel defaultSize={80} minSize={10}>
-                                <World code={code} editBlock={blockSelected} readonly={mode===1}></World>
+                                <World code={code} editBlock={blockSelected} readonly={mode === 1} onStateChange={(state: string) => setWorldState(state)}></World>
                             </Panel>
                             <PanelResizeHandle />
                             <Panel hidden={mode===2} minSize={10}>
@@ -57,7 +58,7 @@ function IdePage() {
                     {mode===1 ?
                         <Panel defaultSize={30} minSize={10} className="overflow-auto">
                             <center>Editeur</center>
-                            <Code onRun={handleCodeRun}></Code>
+                            <Code onRun={handleCodeRun} worldState={worldState}></Code>
                         </Panel>
                         :
                         <Panel defaultSize={30} minSize={10}>
