@@ -1,6 +1,5 @@
 import { P5CanvasInstance, SketchProps } from "react-p5-wrapper";
 import Block from "../../../models/Block";
-import { getCssVariableValue } from "../../../utils";
 
 class Robot {
     x: number;
@@ -44,7 +43,7 @@ class Utils {
     }
 }
 
-export default function GridSketch(p5: P5CanvasInstance) {
+export default function Sketch(p5: P5CanvasInstance) {
     let currentWidth: number = 200;
     let currentHeight: number = 200;
 
@@ -227,7 +226,7 @@ export default function GridSketch(p5: P5CanvasInstance) {
                             p5.fill(p5.color(200, 100, 100)); // Red
                             break;
                         case 3:
-                            p5.fill(p5.color(64, 255, 0)); // Start
+                            p5.fill(p5.color(54, 214, 0)); // Start
                             break;
                         case 4:
                             p5.fill(p5.color(255, 162, 0)); // Inter

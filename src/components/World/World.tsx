@@ -1,6 +1,6 @@
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { useResizeDetector } from "react-resize-detector";
-import GridSketch from "./Sketches/GridSketch";
+import GridSketch from "./Sketches/Sketch";
 import Block from "../../models/Block";
 
 export default function World(props: {code: string | undefined, editBlock: Block | null | undefined, readonly: boolean}) {
