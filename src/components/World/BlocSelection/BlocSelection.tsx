@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Bloc from "./Bloc";
 import Block from "../../../models/Block";
 import BlockType from "../../../models/BlockType";
+import { GiMaze } from "react-icons/gi";
+
 
 export default function BlocSelection(props: {onSelect: (block: Block) => void}) {
     const [selectionData, setSelectionData] = useState<BlockType>(
@@ -40,11 +42,11 @@ export default function BlocSelection(props: {onSelect: (block: Block) => void})
 
     return (
         <>
-            <p className="text-center text-text text-lg pb-4">Block selection</p>
+            <p className="text-center text-text text-xl pt-2 pb-4">Block selection</p>
 
             <div className="flex flex-col gap-8">
                 <div className="flex flex-col">
-                    <p className="text-center text-text text-md">Steps block</p>
+                    <p className="text-center text-text text-md underline">Steps block</p>
                     <div className="flex p-2 size-full gap-4 flex-wrap justify-center items-start content-start">
                         <Bloc onClick={() => onBlockSelect("start")} selected={selectionData["start"].selected} color={selectionData["start"].color}>{selectionData["start"].label}</Bloc>
                         <Bloc onClick={() => onBlockSelect("inter")} selected={selectionData["inter"].selected} color={selectionData["inter"].color}>{selectionData["inter"].label}</Bloc>
@@ -53,7 +55,7 @@ export default function BlocSelection(props: {onSelect: (block: Block) => void})
                 </div>
 
                 <div className="flex flex-col">
-                    <p className="text-center text-text text-md">Classical block</p>
+                    <p className="text-center text-text text-md underline">Classical block</p>
                     <div className="flex p-2 size-full gap-4 flex-wrap justify-center items-start content-start">
                         <Bloc onClick={() => onBlockSelect("ground")} selected={selectionData["ground"].selected} color={selectionData["ground"].color}>{selectionData["ground"].label}</Bloc>
                         <Bloc onClick={() => onBlockSelect("path")} selected={selectionData["path"].selected} color={selectionData["path"].color}>{selectionData["path"].label}</Bloc>
@@ -62,9 +64,21 @@ export default function BlocSelection(props: {onSelect: (block: Block) => void})
                 </div>
 
                 <div className="flex flex-col">
-                    <p className="text-center text-text text-md">Action block</p>
+                    <p className="text-center text-text text-md underline">Action block</p>
                     <div className="flex p-2 size-full gap-4 flex-wrap justify-center items-start content-start">
                         <Bloc onClick={() => onBlockSelect("wood")} selected={selectionData["wood"].selected} color={selectionData["wood"].color}>{selectionData["wood"].label}</Bloc>
+                    </div>
+                </div>
+
+                <hr className="mx-2" />
+
+
+                <div className="flex flex-col">
+                    <p className="text-center text-text text-md underline">Generation</p>
+                    <div className="flex p-2 size-full gap-4 flex-wrap justify-center items-start content-start">
+                        <button className="flex gap-2 justify-center items-center border-text border-2 p-2 rounded">
+                            Maze <GiMaze size={"2em"}/>
+                        </button>
                     </div>
                 </div>
             </div>

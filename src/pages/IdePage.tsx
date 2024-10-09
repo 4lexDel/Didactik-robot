@@ -58,14 +58,14 @@ function IdePage() {
                             }
                         </PanelGroup>
                     </Panel>
-                    <PanelResizeHandle className="overflow-auto w-1 z-index-1"/>
+                    <PanelResizeHandle className="w-1 z-index-1"/>
                     {mode===1 ?
-                        <Panel defaultSize={30} minSize={10} className="overflow-auto">
+                        <Panel defaultSize={30} minSize={10}>
                             <center>Editeur</center>
                             <Code onRun={handleCodeRun} worldState={worldState}></Code>
                         </Panel>
                         :
-                        <Panel defaultSize={30} minSize={10}>
+                        <Panel defaultSize={30} minSize={10} style={{overflow: "auto"}}>
                             <BlocSelection onSelect={onBlockSelected}></BlocSelection>
                         </Panel>
                     }
