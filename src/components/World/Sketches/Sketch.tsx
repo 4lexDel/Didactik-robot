@@ -117,15 +117,15 @@ export default function Sketch(p5: P5CanvasInstance) {
         // console.log(`X=${p5.mouseX} Y=${p5.mouseY} Button=${p5.mouseButton}`);
         console.log(editBlock);
         
-        if (p5.mouseButton === "left" && editBlock && !readonly) {
+        if(!readonly){
             let mapCoords = convertMouseCoordsToMapCoords(p5.mouseX, p5.mouseY);
-
-            mapCoords && updateMapCell(mapCoords.x, mapCoords.y, editBlock.id);
-        }
-        else {
-            // Remove for prod
-            robot.x = 0;
-            robot.y = 0;
+            
+            if (p5.mouseButton === "left" && editBlock) {
+                mapCoords && updateMapCell(mapCoords.x, mapCoords.y, editBlock.id);
+            }
+            else {
+                mapCoords && updateMapCell(mapCoords.x, mapCoords.y, 0);
+            }
         }
     }
 
