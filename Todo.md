@@ -22,6 +22,7 @@
 ## Modes
     - Creator: 
         * Environment area enabled - bloc selection
+            + The Randomized Kruskal's Algorithm https://professor-l.github.io/mazes/
             + Obstacle
             + Mark
             + Nothing

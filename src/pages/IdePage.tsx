@@ -58,7 +58,7 @@ function IdePage() {
                             }
                         </PanelGroup>
                     </Panel>
-                    <PanelResizeHandle className="w-1 z-index-1"/>
+                    <PanelResizeHandle className="w-1 z-index-1" style={{cursor: "col-resize"}}/>
                     {mode===1 ?
                         <Panel defaultSize={30} minSize={10}>
                             <center>Editeur</center>

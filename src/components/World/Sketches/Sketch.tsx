@@ -1,5 +1,6 @@
 import { P5CanvasInstance, SketchProps } from "react-p5-wrapper";
 import Block from "../../../models/Block";
+// import { MazeFusion } from "@4lexdel/maze-generator";
 
 type StateCallback = (state: string) => void;
 
@@ -122,12 +123,15 @@ export default function Sketch(p5: P5CanvasInstance) {
         if (!map){
             map = Array.from({ length: nbX }, () => Array(nbY).fill(0));
             // Start
-            map[0][0] = 3;
-            robot.x = 0;
-            robot.y = 0;
+            map[1][1] = 3;
+            robot.x = dx;
+            robot.y = dy;
         }
         else {
             map = Utils.resize2DArray(map, nbX, nbY, 0);
+
+            // const maze = new MazeFusion(nbX, nbY, 1, 0);
+            // map = maze.generate();
         }
     }
 
