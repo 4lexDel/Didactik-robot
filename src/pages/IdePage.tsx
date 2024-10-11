@@ -6,6 +6,8 @@ import ToggleSwitch from "../components/Shared/ToggleSwitch/ToggleSwitch";
 import { useParams } from "react-router-dom";
 import BlocSelection from "../components/World/BlocSelection/BlocSelection";
 import Block from "../models/Block";
+import { IoSaveOutline } from "react-icons/io5";
+import { LuDownload } from "react-icons/lu";
 
 function IdePage() {
     const [code, setCode] = useState<string | undefined>(undefined);
@@ -32,14 +34,22 @@ function IdePage() {
     
     return (
         <>
-            <div>
-                <ToggleSwitch
-                    label="Mode" 
-                    option1="Developer" 
-                    option2="Creator" 
-                    defaultValue={mode===1}
-                    disabled={category !== "sandbox"}
-                    onChange={(optionSelected: number) => setMode(optionSelected)}></ToggleSwitch>
+            <div className="grid grid-cols-8 items-center">
+                <div className="col-span-7">
+                    <ToggleSwitch
+                        label="Mode" 
+                        option1="Developer" 
+                        option2="Creator" 
+                        defaultValue={mode===1}
+                        disabled={category !== "sandbox"}
+                        onChange={(optionSelected: number) => setMode(optionSelected)}></ToggleSwitch>
+                </div>
+                <div className="col-span-1 justify-self-end flex gap-6 mr-10">
+                    <IoSaveOutline className="cursor-pointer" size={30}></IoSaveOutline>
+                    {category === "games" && 
+                        <LuDownload className="cursor-pointer" size={30}></LuDownload>
+                    }
+                </div>
             </div>
             <div className="flex-1 ide-page h-96 flex flex-col">
                 <PanelGroup direction="horizontal" className="border-2 border-text">

@@ -16,7 +16,7 @@ function ToggleSwitch(props: {label: string, option1: string, option2: string, o
     }, [props.defaultValue]);
 
     return (
-        <div className="container p-4 flex justify-center items-center gap-4">
+        <div className="switch-container p-4 flex justify-center items-center gap-4">
             <p className="text-text text-xl">{props.label}:</p>
             <div className="toggle-switch">
                 <input
