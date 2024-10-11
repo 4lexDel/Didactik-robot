@@ -246,8 +246,8 @@ export default function Sketch(p5: P5CanvasInstance) {
             const startCoords = getStartPointCoords();
 
             if(startCoords) {
-                robot.x = startCoords.x;
-                robot.y = startCoords.y;
+                robot.x = startCoords.x * dx;
+                robot.y = startCoords.y * dy;
             }
 
             onStateChange && onStateChange("stopped");
